@@ -1,9 +1,8 @@
-import 'dart:async';
-import 'dart:convert' show json;
 import 'package:coinolio/OHLCService.dart';
+import 'package:coinolio/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_candlesticks/flutter_candlesticks.dart';
-import 'package:http/http.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 void main() => runApp(new MyApp());
 
@@ -12,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Coinolio',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -52,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<dynamic> _coinChartData = [];
   List<Coin> _coins = <Coin>[
-    Coin("loading...", "loading")
+    Coin()..id="loading..."..name="loading"
   ];
   Coin _selectedCoin;
 
@@ -70,16 +69,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
-    var coins = await dataService.getCoins();
+    //var exchanges = await dataService.getExchanges();
 
-    _coins = coins;
+    var coins = await dataService.getAllCoins();
+
+    _coins = coins.sublist(0,10);
 
     _selectCoin(coins[0]);
   }
 
   void _selectCoin(Coin selectedCoin) async {
-
-    var data = await dataService.getCoinDataHours(Pair(selectedCoin, "USD" /* TODO */));
+    var data = await dataService.getCoinDataHoursDynamic(Pair(null, selectedCoin, "USD" /* TODO */));
 
     setState(() {
       _selectedCoin = selectedCoin;
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title + ' : ' + (_selectedCoin?.name??'')),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
@@ -100,10 +100,16 @@ class _MyHomePageState extends State<MyHomePage> {
           PopupMenuButton<Coin>(
             onSelected: _selectCoin,
             itemBuilder: (BuildContext context) {
-              return _coins.map((Coin choice) {
+              return _coins.map((Coin coin) {
                 return PopupMenuItem<Coin>(
-                  value: choice,
-                  child: Text(choice.fullName),
+                  value: coin,
+                  child:Row(
+                    children: <Widget>[
+                      //CachedNetworkImage(imageUrl: coin.imageUrl),
+                      Image(image: CachedNetworkImageProvider(coin.imageUrl)),
+                      Text(coin.name)
+                    ],
+                  ),
                 );
               }).toList();
             },
@@ -114,8 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child:
             (_coinChartData.isEmpty) ?
               new Container(
-                height: 500.0,
-                child: new Text("loading.."),
+                child: new Text("loading..."),
               )
             :
               Container(
@@ -130,13 +135,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               )
       ),
-      /*
       floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => (null),
         tooltip: 'Increment',
         child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-      */
+      ),
     );
   }
 }

@@ -1,107 +1,128 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:coinolio/model.dart';
 import 'package:http/http.dart';
 
 
 // https://min-api.cryptocompare.com/
 class OHLCService
 {
-  Future<List<dynamic>> getCoinDataHours(Pair selectedCoin, [int limit=24]) async
+  String _serverRoot = 'https://min-api.cryptocompare.com/data/';
+
+  var headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  };
+
+  Future<List<Exchange>> getExchanges() async
   {
-    Response response =
-    await get('https://min-api.cryptocompare.com/data/histohour?fsym=${selectedCoin.coin.symbol}&tsym=${selectedCoin.base}&limit=${limit.toString()}&aggregate=3&e=CCCAGG',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
+    Response response = await get(
+        '$_serverRoot'
+        'all/exchanges',
+        headers: headers
     );
 
     Map<String, dynamic> resp = json.decode(response.body);
 
-    //var res = OHLCVResponse.fromJson(resp);
+    var res = mapToMap<_ExchangeDTO>(resp, (key, obj) => _ExchangeDTO.fromJson(key, obj));
+    return res.cast<Exchange>();
+  }
+
+  Future<List<OHLCVItem>> getCoinDataHours(Pair coin, [int limit=24]) async
+    => OHLCVResponse.fromJson(await getCoinDataHoursDynamic(coin, limit)).Data;
+
+  Future<List<dynamic>> getCoinDataHoursDynamic(Pair coin, [int limit=24]) async
+  {
+    Response response = await get(
+        '$_serverRoot'
+        'histohour'
+        '?fsym=${coin.symbol}'
+        '&tsym=${coin.base}'
+        '&limit=${limit.toString()}'
+        '&aggregate=3'
+        '&e=${coin.exchange?.name ?? 'CCCAGG'}',
+        headers: headers
+    );
+
+    Map<String, dynamic> resp = json.decode(response.body);
 
     return resp["Data"];
   }
 
-  Future<List<Coin>> getCoins() async
+  Future<List<Coin>> getAllCoins() async
   {
-    Response response = await get('https://min-api.cryptocompare.com/data/all/coinlist',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
+    Response response = await get(
+        '$_serverRoot'
+        'all/coinlist',
+        headers: headers
     );
 
     Map<String, dynamic> resp = json.decode(response.body);
 
-    var res = mapMap<Coin>(resp["Data"], (key, obj) => Coin.fromJson(obj));
+    var res = mapToMap<_CoinDTO>(resp["Data"], (key, obj) => _CoinDTO.fromJson(obj));
     res.sort((a,b) => a.sortOrder.compareTo(b.sortOrder));
-    return res;
+    return res.cast<Coin>();
   }
 }
 
 
-class Pair
+class _ExchangeDTO extends Exchange
 {
-  Coin coin;
-  String base;
+  _ExchangeDTO.fromJson(String exchangeName, Map<String, dynamic> json) {
+    name = exchangeName;
+    pairs = List<Pair>();
+    json.forEach((coin,v) =>
+        v.forEach((base) =>
+            pairs.add(Pair(this, Coin()..name=coin, base))));
+  }
+}
 
-  Pair(this.coin, [this.base="USD"]);
+class _CoinDTO extends Coin
+{
+  String url;       // "/coins/zil/overview"
+  bool sponsored;   // false
+  int sortOrder;    // "2152"
+  bool isTrading;   // true
+
+  _CoinDTO.fromJson(Map<String, dynamic> json) {
+        id = json["Id"];
+        name = json["Name"];
+        url = /*'https://www.cryptocompare.com' +*/ json["Url"];
+        imageUrl = 'https://www.cryptocompare.com${json["ImageUrl"].toString()}';
+        symbol = json["Symbol"];
+        coinName = json["CoinName"];
+        fullName = json["FullName"];
+        algorithm = json["Algorithm"];
+        proofType = json["ProofType"];
+        fullyPreMined = json["FullyPremined"];
+        totalCoinSupply = json["TotalCoinSupply"];
+        preMinedValue = json["PreMinedValue"];
+        totalCoinsFreeFloat = json["TotalCoinsFreeFloat"];
+        sponsored = json["Sponsored"];
+        sortOrder = int.parse(json["SortOrder"]);
+        isTrading = json["IsTrading"];
+    }
 }
 
 
-class Coin
-{
-  String id;        //  "716725"
-  //String url;     //  "/coins/zil/overview"
-  String imageUrl;  //  "/media/27010464/zil.png"
-  String name;      //  "ZIL"
-  String symbol;    //  "ZIL"
-  String coinName;  //  "Zilliqa"
-  String fullName;  //  "Zilliqa (ZIL)"
-  String algorithm; //  "N/A"
-  String proofType; //  "N/A"
-  String fullyPremined;   //  "0"
-  String totalCoinSupply; //  "12600000000"
-  String preMinedValue;   //  "N/A"
-  String totalCoinsFreeFloat;//  "N/A"
-  int sortOrder;          //  "2152"
-  //bool sponsored;       // false
-  bool isTrading;         // true
-
-  Coin(this.id, this.name);
-
-  Coin.fromJson(Map<String, dynamic> json) :
-        id = json["Id"],
-        imageUrl = json["ImageUrl"],
-        name = json["Name"],
-        symbol = json["Symbol"],
-        coinName = json["CoinName"],
-        fullName = json["FullName"],
-    // ...
-        sortOrder = int.parse(json["SortOrder"])
-  ;
-}
-
-/*
 class OHLCVResponse
 {
   List<OHLCVItem> Data;
 
-  OHLCVResponse.fromJson(Map<String, dynamic> json)
-      : Data = map<OHLCVItem>((json['Data'])/*.cast<List<dynamic>>()*/, (line) => OHLCVItem.fromJson(line));
+  OHLCVResponse.fromJson(List<dynamic> json)
+      : Data = mapToList<OHLCVItem>(json, (line) => OHLCVItem.fromJson(line));
 }
 
 class OHLCVItem
 {
-  //num time;//: 1526176800
-  num close;//: 8421.96
-  num high;//: 8448.33
-  num low;//: 8386.37
-  num open;//: 8447.71
-  num volumeFrom;//: 2669.79
-  num volumeTo;//: 22480267.83
+  //num time;     //: 1526176800
+  num close;      //: 8421.96
+  num high;       //: 8448.33
+  num low;        //: 8386.37
+  num open;       //: 8447.71
+  num volumeFrom; //: 2669.79
+  num volumeTo;   //: 22480267.83
 
   OHLCVItem.fromJson(Map<dynamic, dynamic> json)
       : //time = json['time'],
@@ -113,9 +134,9 @@ class OHLCVItem
         volumeTo = json['volumeto']
     ;
 }
-*/
 
-List<T> map<T>(List list, converter(x)) {
+
+List<T> mapToList<T>(List list, converter(x)) {
   final List<T> result = [];
   for (final x in list) {
     result.add(converter(x));
@@ -123,11 +144,9 @@ List<T> map<T>(List list, converter(x)) {
   return result;
 }
 
-List<T> mapMap<T>(Map<String, dynamic> map, converter(x, y)) {
+List<T> mapToMap<T>(Map<String, dynamic> map, converter(x, y)) {
   final List<T> result = [];
   void iterateMapEntry(key, value) {
-    //map[key] = value;
-    //print('$key:$value');//string interpolation in action
     result.add(converter(key, value));
   }
   map.forEach(iterateMapEntry);
