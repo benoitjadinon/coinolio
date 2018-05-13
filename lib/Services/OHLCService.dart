@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:coinolio/model.dart';
+import 'package:coinolio/Model/model.dart';
 import 'package:http/http.dart';
 
 
@@ -10,7 +10,7 @@ class OHLCService
 {
   String _serverRoot = 'https://min-api.cryptocompare.com/data/';
 
-  var headers = {
+  var _defaultJSONHeaders = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   };
@@ -20,7 +20,7 @@ class OHLCService
     Response response = await get(
         '$_serverRoot'
         'all/exchanges',
-        headers: headers
+        headers: _defaultJSONHeaders
     );
 
     Map<String, dynamic> resp = json.decode(response.body);
@@ -42,7 +42,7 @@ class OHLCService
         '&limit=${limit.toString()}'
         '&aggregate=3'
         '&e=${coin.exchange?.name ?? 'CCCAGG'}',
-        headers: headers
+        headers: _defaultJSONHeaders
     );
 
     Map<String, dynamic> resp = json.decode(response.body);
@@ -55,7 +55,7 @@ class OHLCService
     Response response = await get(
         '$_serverRoot'
         'all/coinlist',
-        headers: headers
+        headers: _defaultJSONHeaders
     );
 
     Map<String, dynamic> resp = json.decode(response.body);

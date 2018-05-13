@@ -1,5 +1,5 @@
-import 'package:coinolio/OHLCService.dart';
-import 'package:coinolio/model.dart';
+import 'package:coinolio/Services/OHLCService.dart';
+import 'package:coinolio/Model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_candlesticks/flutter_candlesticks.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -73,13 +73,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var coins = await dataService.getAllCoins();
 
-    _coins = coins.sublist(0,10);
+    _coins = coins.sublist(0,20);
 
     _selectCoin(coins[0]);
   }
 
   void _selectCoin(Coin selectedCoin) async {
-    var data = await dataService.getCoinDataHoursDynamic(Pair(null, selectedCoin, "USD" /* TODO */));
+    var data = await dataService.getCoinDataHoursDynamic(Pair(null /* TODO */, selectedCoin, "USD" /* TODO */));
 
     setState(() {
       _selectedCoin = selectedCoin;
@@ -117,23 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Center(
-        child:
-            (_coinChartData.isEmpty) ?
-              new Container(
-                child: new Text("loading..."),
-              )
-            :
-              Container(
-                child: OHLCVGraph(
-                    data: _coinChartData,
-                    enableGridLines: true,
-                    volumeProp: 0.15,
-                    labelPrefix: "€",
-                    gridLineAmount: 10,
-                    gridLineColor: Colors.grey[300],
-                    gridLineLabelColor: Colors.grey,
-                ),
-              )
+        child:buildList()
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () => (null),
@@ -142,4 +126,23 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+  Container buildList()
+    =>
+      (_coinChartData.isEmpty) ?
+        new Container(
+          child: new Text("loading..."),
+        )
+      :
+        Container(
+          child: OHLCVGraph(
+              data: _coinChartData,
+              enableGridLines: true,
+              volumeProp: 0.15,
+              labelPrefix: "€",
+              gridLineAmount: 10,
+              gridLineColor: Colors.grey[300],
+              gridLineLabelColor: Colors.grey,
+          ),
+        );
 }
