@@ -53,15 +53,23 @@ class ActivityState extends State<TappableOHLCVGraph>
         print(_lastPrice);
       },
       child: new Container(
-        child: (graph = OHLCVGraph(
-        data: _coinChartData,
-        enableGridLines: true,
-        volumeProp: 15/100,
-        labelPrefix: "€",
-        gridLineAmount: 10,
-        gridLineColor: Colors.grey[300],
-        gridLineLabelColor: Colors.grey,
-        )),
+        child: (
+          graph = OHLCVGraph(
+            data: _coinChartData,
+            enableGridLines: true,
+            volumeProp: 15/100,
+            labelPrefix: "\$",
+            gridLineAmount: 10,
+            gridLineColor: Colors.grey[300],
+            gridLineLabelColor: Colors.grey,
+            greenPaint: new Paint()
+              ..color = Colors.green
+              ..strokeWidth = 1.0
+              ..style = PaintingStyle.fill,
+            volumePaint: new Paint()
+              ..color = Colors.grey
+              ..style = PaintingStyle.stroke,
+          )),
       ),
     );
   }
