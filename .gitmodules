@@ -1,0 +1,3 @@
+[submodule "libs/flutter-candlesticks"]
+	path = libs/flutter-candlesticks
+	url = https://benoitjadinon@github.com/benoitjadinon/flutter-candlesticks.git
