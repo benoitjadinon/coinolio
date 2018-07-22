@@ -1,5 +1,6 @@
 import 'package:coinolio/Services/OHLCService.dart';
 import 'package:coinolio/Model/model.dart';
+import 'package:coinolio/Views/PlaceHolder.dart';
 import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -51,7 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<dynamic> _coinChartData = [];
   List<Coin> _coins = <Coin>[
-    Coin()..id="loading..."..name="loading"
+    Coin()
+      ..id="loading..."
+      ..name="loading"
   ];
   Coin _selectedCoin;
 
@@ -74,6 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
     var coins = await dataService.getAllCoins();
 
     _coins = coins.sublist(0,20);
+
+    if (!mounted)
+      return;
 
     _selectCoin(coins[0]);
   }
@@ -122,13 +128,16 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Center(
-        child:buildList()
+        child://Stack(children: <Widget>[
+          //Placeholder(),
+          buildList()
+        //])
       ),
-      floatingActionButton: new FloatingActionButton(
+      /*floatingActionButton: new FloatingActionButton(
         onPressed: () => (null),
         tooltip: 'Increment',
         child: new Icon(Icons.add),
-      ),
+      ),*/
     );
   }
 
