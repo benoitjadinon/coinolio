@@ -1,5 +1,6 @@
 import 'package:coinolio/Services/OHLCService.dart';
 import 'package:coinolio/Model/model.dart';
+import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_candlesticks/flutter_candlesticks.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -135,14 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       :
         Container(
-          child: OHLCVGraph(
-              data: _coinChartData,
-              enableGridLines: true,
-              volumeProp: 0.15,
-              labelPrefix: "€",
-              gridLineAmount: 10,
-              gridLineColor: Colors.grey[300],
-              gridLineLabelColor: Colors.grey,
-          ),
+          child: TappableOHLCVGraph(_coinChartData)
         );
 }

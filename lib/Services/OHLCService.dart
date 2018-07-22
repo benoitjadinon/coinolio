@@ -30,7 +30,7 @@ class OHLCService
   }
 
   Future<List<OHLCVItem>> getCoinDataHours(Pair coin, [int limit=24]) async
-    => OHLCVResponse.fromJson(await getCoinDataHoursDynamic(coin, limit)).Data;
+    => OHLCVResponse.fromJson(await getCoinDataHoursDynamic(coin, limit)).data;
 
   Future<List<dynamic>> getCoinDataHoursDynamic(Pair coin, [int limit=24]) async
   {
@@ -108,10 +108,10 @@ class _CoinDTO extends Coin
 
 class OHLCVResponse
 {
-  List<OHLCVItem> Data;
+  List<OHLCVItem> data;
 
   OHLCVResponse.fromJson(List<dynamic> json)
-      : Data = mapToList<OHLCVItem>(json, (line) => OHLCVItem.fromJson(line));
+      : data = mapToList<OHLCVItem>(json, (line) => OHLCVItem.fromJson(line));
 }
 
 class OHLCVItem
