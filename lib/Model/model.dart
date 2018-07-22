@@ -9,15 +9,16 @@ class Pair
 {
   final Exchange exchange;
   final Coin coin;
-  final String base;
+  final Coin base;
 
   String get symbol => coin.symbol;
-  String get name => symbol+'/'+base;
+  String get name => symbol + '/' + base.symbol;
 
-  Pair(this.exchange, this.coin, [this.base="USD"]);
+  Pair(this.exchange, this.coin, this.base);
 }
 
-class Coin {
+class Coin
+{
   String id;            //  "716725"
   String name;          //  "ZIL"
   String imageUrl;      //  "/media/27010464/zil.png" // https://www.cryptocompare.com/media/27...
@@ -30,4 +31,10 @@ class Coin {
   String totalCoinSupply;     //  "12600000000"
   String preMinedValue;       //  "N/A"
   String totalCoinsFreeFloat; //  "N/A"
+
+  bool isFiat = false;
+
+  Coin([this.symbol]);
+
+  static Coin Dollar = Coin("USD")..isFiat=true;
 }

@@ -38,7 +38,7 @@ class OHLCService
         '$_serverRoot'
         'histohour'
         '?fsym=${coin.symbol}'
-        '&tsym=${coin.base}'
+        '&tsym=${coin.base.symbol}'
         '&limit=${limit.toString()}'
         '&aggregate=3'
         '&e=${coin.exchange?.name ?? 'CCCAGG'}',
@@ -74,7 +74,7 @@ class _ExchangeDTO extends Exchange
     pairs = List<Pair>();
     json.forEach((coin,v) =>
         v.forEach((base) =>
-            pairs.add(Pair(this, Coin()..name=coin, base))));
+            pairs.add(Pair(this, Coin(coin), base))));
   }
 }
 

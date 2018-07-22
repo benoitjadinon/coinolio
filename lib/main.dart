@@ -2,7 +2,6 @@ import 'package:coinolio/Services/OHLCService.dart';
 import 'package:coinolio/Model/model.dart';
 import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_candlesticks/flutter_candlesticks.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 void main() => runApp(new MyApp());
@@ -79,8 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
     _selectCoin(coins[0]);
   }
 
-  void _selectCoin(Coin selectedCoin) async {
-    var data = await dataService.getCoinDataHoursDynamic(Pair(null /* TODO */, selectedCoin, "USD" /* TODO */));
+  void _selectCoin(Coin selectedCoin) async
+  {
+    setState(() {
+      _coinChartData = [];
+    });
+
+    var data = await dataService.getCoinDataHoursDynamic(Pair(null /* TODO */, selectedCoin, Coin.Dollar /* TODO */));
 
     setState(() {
       _selectedCoin = selectedCoin;
