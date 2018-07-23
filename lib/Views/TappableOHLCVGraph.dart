@@ -46,7 +46,7 @@ class ActivityState extends State<TappableOHLCVGraph>
       onTapDown: (a) {
         RenderBox getBox = context.findRenderObject();
         var local = getBox.globalToLocal(a.globalPosition);
-        _lastPrice = calcultePrice(local.dy, graph.volumeProp, getBox.paintBounds);
+        _lastPrice = calculatePrice(local.dy, graph.volumeProp, getBox.paintBounds);
       },
       onLongPress: () {
         //setState(() {  });
@@ -74,7 +74,7 @@ class ActivityState extends State<TappableOHLCVGraph>
     );
   }
 
-  double calcultePrice(double y, double perc, Rect paintBounds)
+  double calculatePrice(double y, double perc, Rect paintBounds)
   {
     var h = (paintBounds.height -(paintBounds.height * perc));
     var posPerc = (y / h);
