@@ -1,6 +1,6 @@
 import 'package:coinolio/Services/OHLCService.dart';
 import 'package:coinolio/Model/model.dart';
-import 'package:coinolio/Views/PlaceHolder.dart';
+//import 'package:coinolio/Views/PlaceHolder.dart';
 import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _coinChartData = [];
     });
 
-    var data = await dataService.getCoinDataHoursDynamic(Pair(null /* TODO */, selectedCoin, Coin.Dollar /* TODO */));
+    var data = await dataService.getCoinDataHoursDynamic(Pair(null /* TODO */, selectedCoin, Coin.dollar /* TODO */));
 
     setState(() {
       _selectedCoin = selectedCoin;

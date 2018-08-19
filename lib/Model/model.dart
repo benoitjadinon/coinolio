@@ -36,5 +36,5 @@ class Coin
 
   Coin([this.symbol]);
 
-  static Coin Dollar = Coin("USD")..isFiat=true;
+  static Coin dollar = Coin("USD")..isFiat=true;
 }

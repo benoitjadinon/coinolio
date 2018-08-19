@@ -13,6 +13,12 @@ class PairBloc
   Stream<Pair> get selectedPair => _selectedPair.stream;
 
   PairBloc(){
-    _selectController.stream.listen((e) => _selectedPair.add(e));
+    _selectController.stream.listen(_selectedPair.add);
+  }
+
+  void dispose()
+  {
+    _selectController.close();
+    _selectedPair.close();
   }
 }
