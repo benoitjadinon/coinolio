@@ -53,6 +53,8 @@ class ActivityState extends State<TappableOHLCVGraph>
         print(_lastPrice);
       },
       child: new Container(
+        height: 300.0,
+        color: new Color.fromARGB(255, 45, 45, 45),
         child: (
           graph = OHLCVGraph(
             data: _coinChartData,
@@ -60,15 +62,23 @@ class ActivityState extends State<TappableOHLCVGraph>
             volumeProp: 15/100,
             labelPrefix: "\$",
             gridLineAmount: 10,
+            gridLineWidth: 0.0,
             gridLineColor: Colors.grey[300],
             gridLineLabelColor: Colors.grey,
-            greenPaint: new Paint()
+            decreasePaint: new Paint()
+              ..color = Colors.red
+              ..strokeWidth = 1.0
+              ..style = PaintingStyle.fill
+            ,
+            increasePaint: new Paint()
               ..color = Colors.green
               ..strokeWidth = 1.0
-              ..style = PaintingStyle.fill,
+              ..style = PaintingStyle.fill
+            ,
             volumePaint: new Paint()
-              ..color = Colors.grey
-              ..style = PaintingStyle.stroke,
+              ..color = new Color.fromARGB(15, 255, 255, 255)
+              ..style = PaintingStyle.fill,
+            candleSpacing: 1.2,
           )),
       ),
     );
