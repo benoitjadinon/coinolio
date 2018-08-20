@@ -1,6 +1,7 @@
 import 'package:coinolio/Services/OHLCService.dart';
 import 'package:coinolio/Model/model.dart';
-//import 'package:coinolio/Views/PlaceHolder.dart';
+import 'package:coinolio/Model/CoinsBloc.dart';
+import 'package:coinolio/Views/PlaceHolder.dart';
 import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -18,105 +19,84 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
 
-  List<dynamic> _coinChartData = [];
-  List<Coin> _coins = <Coin>[
-    Coin()
-      ..id="loading..."
-      ..name="loading"
-  ];
-  Coin _selectedCoin;
-
-  OHLCService dataService;
-
-  _MyHomePageState(){
-    dataService = OHLCService();
-  }
+  CoinsBloc bloc = CoinsBloc(OHLCService());
 
   @override
   void initState() {
     super.initState();
 
-    loadData();
-  }
-
-  void loadData() async {
-    //var exchanges = await dataService.getExchanges();
-
-    var coins = await dataService.getAllCoins();
-
-    _coins = coins.sublist(0,20);
-
-    if (!mounted)
-      return;
-
-    _selectCoin(coins[0]);
-  }
-
-  void _selectCoin(Coin selectedCoin) async
-  {
-    setState(() {
-      _coinChartData = [];
-    });
-
-    var data = await dataService.getCoinDataHoursDynamic(Pair(null /* TODO */, selectedCoin, Coin.dollar /* TODO */));
-
-    setState(() {
-      _selectedCoin = selectedCoin;
-      _coinChartData = data;
-    });
+    //bloc.loadData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title + ' : ' + (_selectedCoin?.name??'')),
+        title: new StreamBuilder(
+          stream: bloc.selectedCoin,
+          builder: (context, snapshot)
+            => Text(widget.title + ' : ' + (snapshot.data?.name ?? ''))
+        ),
         actions: <Widget>[
-          IconButton(
+          /*IconButton(
             icon: Icon(Icons.refresh),
-            onPressed:loadData,
-          ),
-          PopupMenuButton<Coin>(
-            onSelected: _selectCoin,
-            itemBuilder: (BuildContext context) {
-              return _coins.map((Coin coin) {
-                return PopupMenuItem<Coin>(
-                  value: coin,
-                  child:Row(
-                    children: <Widget>[
-                      //CachedNetworkImage(imageUrl: coin.imageUrl),
-                      Image(image: CachedNetworkImageProvider(coin.imageUrl)),
-                      Text(coin.name)
-                    ],
-                  ),
-                );
-              }).toList();
-            },
-          ),
+            //onPressed:bloc.refresh, //TODO
+          ),*/
+          buildList()
         ],
       ),
       body: Center(
-          child://Stack(children: <Widget>[
-          //Placeholder(),
-          buildList()
-        //])
+          child:Stack(children: <Widget>[
+            //PlaceHolder(),
+            buildChart()
+        ])
       ),
-      /*floatingActionButton: new FloatingActionButton(
+      /*
+      floatingActionButton: new FloatingActionButton(
         onPressed: () => (null),
         tooltip: 'Increment',
         child: new Icon(Icons.add),
-      ),*/
+      ),
+      */
     );
   }
 
-  Container buildList()
-  =>
-      (_coinChartData.isEmpty) ?
-      new Container(
-        child: new Text("loading..."),
+  Container buildChart()
+    => Container(
+      child: new StreamBuilder(
+        stream: bloc.coinChartData,
+        builder: (context, snapshot) {
+          return !snapshot.hasData || snapshot.data == null
+            ? new CircularProgressIndicator()
+            : TappableOHLCVGraph(snapshot.data);
+        }
       )
-          :
-      Container(
-          child: TappableOHLCVGraph(_coinChartData)
-      );
+    );
+
+  Widget buildList() {
+    return new StreamBuilder(
+      stream: bloc.coins,
+      builder: (context, snapshot) {
+        return !snapshot.hasData
+          ? new CircularProgressIndicator()
+          : PopupMenuButton<Coin>(
+            onSelected: (c) =>
+              bloc.selectCoin.add(c),
+            itemBuilder: (c) => (snapshot.data as List<Coin>).map((Coin coin) {
+              return PopupMenuItem<Coin>(
+                value: coin,
+                child: Row(
+                  children: <Widget>[
+                    //CachedNetworkImage(imageUrl: coin.imageUrl),
+                    Image(image: CachedNetworkImageProvider(coin.imageUrl)),
+                    Text(coin.name)
+                  ],
+                ),
+              );
+            }).toList()
+        );
+      },
+    );
+  }
 }
+

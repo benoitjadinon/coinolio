@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_candlesticks/flutter_candlesticks.dart';
 
-class TappableOHLCVGraph extends StatefulWidget
+class TappableOHLCVGraph extends StatelessWidget
 {
-  final List _coinChartData;
-  TappableOHLCVGraph(this._coinChartData);
-
+  //final List _coinChartData;
+  //TappableOHLCVGraph(this._coinChartData);
+/*
   @override
   ActivityState createState() => new ActivityState(_coinChartData);
 }
 
 class ActivityState extends State<TappableOHLCVGraph>
 {
+*/
   List _coinChartData;
 
   double _min;
   double _max;
   //double _maxVolume;
 
-  ActivityState(this._coinChartData){
+  TappableOHLCVGraph(this._coinChartData){
     _min = double.infinity;
     _max = -double.infinity;
     //_maxVolume = -double.infinity;
@@ -53,8 +54,8 @@ class ActivityState extends State<TappableOHLCVGraph>
         print(_lastPrice);
       },
       child: new Container(
-        height: 300.0,
-        color: new Color.fromARGB(255, 45, 45, 45),
+        //height: 300.0,
+        //color: new Color.fromARGB(255, 45, 45, 45), // dark
         child: (
           graph = OHLCVGraph(
             data: _coinChartData,
@@ -76,7 +77,7 @@ class ActivityState extends State<TappableOHLCVGraph>
               ..style = PaintingStyle.fill
             ,
             volumePaint: new Paint()
-              ..color = new Color.fromARGB(15, 255, 255, 255)
+              ..color = Colors.grey[200]// new Color.fromARGB(15, 255, 255, 255)
               ..style = PaintingStyle.fill,
             candleSpacing: 1.2,
           )),
