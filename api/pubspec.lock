@@ -63,7 +63,7 @@ packages:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.5"
+    version: "0.14.4"
   front_end:
     dependency: transitive
     description:
@@ -86,7 +86,7 @@ packages:
     source: hosted
     version: "0.13.3+3"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -196,7 +196,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.2"
+    version: "1.6.0"
   plugin:
     dependency: transitive
     description:
@@ -218,13 +218,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.2"
+  rxdart:
+    dependency: "direct main"
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.18.1"
   shelf:
     dependency: transitive
     description:
       name: shelf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.3+3"
+    version: "0.7.3+1"
   shelf_packages_handler:
     dependency: transitive
     description:
@@ -238,7 +245,7 @@ packages:
       name: shelf_static
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.8"
+    version: "0.2.7+1"
   shelf_web_socket:
     dependency: transitive
     description:
@@ -329,7 +336,7 @@ packages:
       name: watcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.7+10"
+    version: "0.9.7+8"
   web_socket_channel:
     dependency: transitive
     description:
@@ -345,4 +352,4 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.0.0-dev.62.0 <2.0.0"
+  dart: ">=2.0.0-dev.61.0 <2.0.0"

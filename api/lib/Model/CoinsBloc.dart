@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:coinolio/Services/OHLCService.dart';
-import 'package:coinolio/Model/model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
+
+import '../Services/OHLCService.dart';
+import 'model.dart';
 
 class CoinsBloc
 {

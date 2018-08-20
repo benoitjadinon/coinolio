@@ -1,11 +1,10 @@
-import 'package:coinolio/Services/OHLCService.dart';
-import 'package:coinolio/Model/model.dart';
-import 'package:coinolio/Model/CoinsBloc.dart';
+import 'package:api/Model/CoinsBloc.dart';
+import 'package:api/Model/model.dart';
+import 'package:api/Services/OHLCService.dart';
 import 'package:coinolio/Views/PlaceHolder.dart';
 import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:api/api.dart';
 
 class HomePage extends StatefulWidget {
 

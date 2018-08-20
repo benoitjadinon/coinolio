@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:coinolio/Model/model.dart';
 import 'package:http/http.dart';
+
+import '../Model/model.dart';
 
 
 // https://min-api.cryptocompare.com/

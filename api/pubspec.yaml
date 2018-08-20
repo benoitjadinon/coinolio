@@ -7,8 +7,13 @@ description: A starting point for Dart libraries or applications.
 environment:
   sdk: '>=2.0.0-dev.55.0 <2.0.0'
 
-#dependencies:
+dependencies:
+
 #  path: ^1.4.1
+
+  http: ^0.11.3+17
+
+  rxdart: ^0.18.1
 
 dev_dependencies:
   test: ^0.12.30
