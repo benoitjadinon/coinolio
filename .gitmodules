@@ -1,4 +1,4 @@
-[submodule "libs/flutter-candlesticks"]
-	path = libs/flutter-candlesticks
+[submodule "app/libs/flutter-candlesticks"]
+	path = app/libs/flutter-candlesticks
 	url = https://benoitjadinon@github.com/benoitjadinon/flutter-candlesticks.git
 	branch = feature/parameterized_colors
