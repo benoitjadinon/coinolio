@@ -1,3 +1,4 @@
+import 'package:coinolio/Services/OHLCService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_candlesticks/flutter_candlesticks.dart';
@@ -14,7 +15,7 @@ class TappableOHLCVGraph extends StatelessWidget
 class ActivityState extends State<TappableOHLCVGraph>
 {
 */
-  List _coinChartData;
+  List<OHLCVItem> _coinChartData;
 
   double _min;
   double _max;
@@ -25,11 +26,11 @@ class ActivityState extends State<TappableOHLCVGraph>
     _max = -double.infinity;
     //_maxVolume = -double.infinity;
     for (var i in _coinChartData) {
-      if (i["high"] > _max) {
-        _max = i["high"].toDouble();
+      if (i.high > _max) {
+        _max = i.high.toDouble();
       }
-      if (i["low"] < _min) {
-        _min = i["low"].toDouble();
+      if (i.low < _min) {
+        _min = i.low.toDouble();
       }
       //if (i["volumeto"] > _maxVolume) {
       //  _maxVolume = i["volumeto"].toDouble();
@@ -58,7 +59,7 @@ class ActivityState extends State<TappableOHLCVGraph>
         //color: new Color.fromARGB(255, 45, 45, 45), // dark
         child: (
           graph = OHLCVGraph(
-            data: _coinChartData,
+            data: _coinChartData.map<dynamic>((i) => i.toMap()).toList(),
             enableGridLines: true,
             volumeProp: 15/100,
             labelPrefix: "\$",

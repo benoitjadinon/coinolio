@@ -133,6 +133,18 @@ class OHLCVItem
         volumeFrom = json['volumefrom'],
         volumeTo = json['volumeto']
     ;
+
+  Map<dynamic, dynamic> toMap ()
+  {
+    return new Map()
+      ..["close"] = close
+      ..["high"] = high
+      ..["low"] = low
+      ..["open"] = open
+      ..["volumefrom"] = volumeFrom
+      ..["volumeto"] = volumeTo
+    ;
+  }
 }
 
 

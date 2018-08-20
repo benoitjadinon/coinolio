@@ -9,8 +9,8 @@ class CoinsBloc
 {
   OHLCService _dataService;
 
-  Stream<List<dynamic>> _coinChartData;
-  Stream<List<dynamic>> get coinChartData => _coinChartData;
+  Stream<List<OHLCVItem>> _coinChartData;
+  Stream<List<OHLCVItem>> get coinChartData => _coinChartData;
 
   ReplaySubject<Coin> _selectedCoin = ReplaySubject(maxSize: 1);
   Stream<Coin> get selectedCoin => _selectedCoin;
@@ -32,7 +32,7 @@ class CoinsBloc
     _coinChartData =
       //_selectedCoin.map((_) => null as List<dynamic>) // shows loading ?
       //.mergeWith([
-      _selectedCoin.asyncMap((c) => _dataService.getCoinDataHoursDynamic(Pair(null /* TODO */, c, Coin.dollar /* TODO */)))
+      _selectedCoin.asyncMap((c) => _dataService.getCoinDataHours(Pair(null /* TODO */, c, Coin.dollar /* TODO */)))
       //])
         ;
 
