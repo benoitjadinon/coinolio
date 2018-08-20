@@ -9,6 +9,7 @@ import 'package:angular_components/material_checkbox/material_checkbox.dart';
 import 'package:angular_components/angular_components.dart';
 
 import 'todo_list_service.dart';
+//import 'package:api/api.dart';
 
 @Component(
   selector: 'todo-list',
@@ -38,6 +39,7 @@ class TodoListComponent implements OnInit {
   }
 
   void add() {
+    //var b = new Awesome().isAwesome;
     items.add(newTodo);
     newTodo = '';
   }
