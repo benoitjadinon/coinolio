@@ -11,6 +11,8 @@ dependencies:
   angular: ^5.0.0-alpha+13
   angular_components: ^0.9.0-alpha+13
 
+  js: ^0.6.0
+
   api:
     path: ../../api
 
