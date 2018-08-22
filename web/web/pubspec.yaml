@@ -5,20 +5,20 @@ description: A web app that uses AngularDart Components
 # author: ben <email@example.com>
 
 environment:
-  sdk: '>=2.0.0-dev.63.0 <2.0.0'
+  sdk: '>=2.0.0'
 
 dependencies:
-  angular: ^5.0.0-alpha+13
-  angular_components: ^0.9.0-alpha+13
+  angular: ^5.0.0
+  angular_components: ^0.9.0
 
-  js: ^0.6.0
+  js: ^0.6.1+1
 
   api:
     path: ../../api
 
 dev_dependencies:
-  angular_test: ^2.0.0-alpha+11
-  build_runner: ^0.8.9
-  build_test: ^0.10.2
-  build_web_compilers: ^0.4.0
-  test: ^0.12.38
+  angular_test: ^2.0.0
+  build_runner: ^0.10.1+1
+  build_test: ^0.10.3+1
+  build_web_compilers: ^0.4.2+2
+  test: ^1.3.0
