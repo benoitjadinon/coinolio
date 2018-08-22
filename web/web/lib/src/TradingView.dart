@@ -1,12 +1,13 @@
 /// https://www.tradingview.com/widget/advanced-chart/
 /// https://github.com/tradingview/charting-library-examples/blob/master/angular5/src/app/tv-chart-container/tv-chart-container.component.ts
-
-@JS()
+/// https://dev.to/graphicbeacon/how-to-use-javascript-libraries-in-your-dart-applications--4mc6
+/// 
+@JS() //TODO context namespace, defaults to `window` (should be "TradingView" here)
 library tv.js;
 
 import "package:js/js.dart";
 
-@JS("TradingView.widget")
+@JS("TradingView.widget") //TODO can be ommited if name same (and Tradingview is moved above)
 class widget {
   external factory widget(WidgetOptions options);
   /*widgetz({String symbol}){ ????
@@ -18,6 +19,9 @@ class widget {
 @JS()
 class WidgetOptions //TODO rename to ChartingLibraryWidgetOptions
 {
+  //TODO 
+  //external factory WidgetOptions({ symbol, container_id, autosize, interval }); // .widget(WidgetOptions(symbol:'AAPL'))
+
   external String get symbol;
   external set symbol(String b);
 
