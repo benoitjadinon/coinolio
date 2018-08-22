@@ -11,6 +11,10 @@ class OHLCService
 {
   String _serverRoot = 'https://min-api.cryptocompare.com/data/';
 
+  final Client _http;
+
+  OHLCService(this._http){}
+
   var _defaultJSONHeaders = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -18,7 +22,7 @@ class OHLCService
 
   Future<List<Exchange>> getExchanges() async
   {
-    Response response = await get(
+    Response response = await _http.get(
         '$_serverRoot'
         'all/exchanges',
         headers: _defaultJSONHeaders
@@ -35,7 +39,7 @@ class OHLCService
 
   Future<List<dynamic>> getCoinDataHoursDynamic(Pair coin, [int limit=24]) async
   {
-    Response response = await get(
+    Response response = await _http.get(
         '$_serverRoot'
         'histohour'
         '?fsym=${coin.symbol}'
@@ -53,7 +57,7 @@ class OHLCService
 
   Future<List<Coin>> getAllCoins() async
   {
-    Response response = await get(
+    Response response = await _http.get(
         '$_serverRoot'
         'all/coinlist',
         headers: _defaultJSONHeaders

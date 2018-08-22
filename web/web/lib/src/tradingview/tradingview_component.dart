@@ -38,11 +38,11 @@ class TradingviewComponent implements OnInit {
   {
     //items = await todoListService.getTodoList();
     tv.widget (
-      new tv.WidgetOptions()
+      tv.WidgetOptions()
           ..container_id = 'tv_chart_container'
           ..autosize = true
           ..symbol = "COINBASE:BTCUSD"
-          ..interval = tv.TimeInterval.M1.toString()
+          ..interval = tv.TimeInterval.H4.toString()
     );/*
           'container_id': 'tv_chart_container',
           'autosize': true,

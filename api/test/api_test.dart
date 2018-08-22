@@ -1,16 +1,15 @@
-import 'package:api/api.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
-    Awesome awesome;
+    //Awesome awesome;
 
     setUp(() {
-      awesome = new Awesome();
+      //awesome = new Awesome();
     });
 
     test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+      //expect(awesome.isAwesome, isTrue);
     });
   });
 }

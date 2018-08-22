@@ -5,6 +5,7 @@ import 'package:coinolio/Views/PlaceHolder.dart';
 import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
 
@@ -19,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
 
-  CoinsBloc bloc = CoinsBloc(OHLCService());
+  CoinsBloc bloc = CoinsBloc(OHLCService(http.Client()));
 
   @override
   void initState() {

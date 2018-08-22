@@ -3,6 +3,5 @@
 /// More dartdocs go here.
 library api;
 
-export 'src/api_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'Model/CoinsBloc.dart';
+export 'Services/OHLCService.dart';
