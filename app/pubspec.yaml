@@ -19,6 +19,9 @@ dependencies:
   flutter_candlesticks: #^0.1.1
     path: libs/flutter-candlesticks
 
+  flutter_sparkline: #0.0.4
+    path: libs/flutter-sparkline
+
   flutter_stream_friends: ^0.8.0
 
   rxdart: ^0.18.1

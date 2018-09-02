@@ -2,3 +2,6 @@
 	path = app/libs/flutter-candlesticks
 	url = https://benoitjadinon@github.com/benoitjadinon/flutter-candlesticks.git
 	branch = feature/parameterized_colors
+[submodule "app/libs/flutter-sparkline"]
+	path = app/libs/flutter-sparkline
+	url = https://github.com/benoitjadinon/flutter_sparkline
