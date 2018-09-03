@@ -139,6 +139,8 @@ class OHLCVItem
         volumeTo = json['volumeto']
     ;
 
+  OHLCVItem.fromClose(double this.close) {}
+
   Map<dynamic, dynamic> toMap ()
   {
     return new Map()
@@ -150,6 +152,7 @@ class OHLCVItem
       ..["volumeto"] = volumeTo
     ;
   }
+
 }
 
 

@@ -15,21 +15,24 @@ class RSIIndicator
     var res = <double>[];
 
     for(int i = 0; i < data.length; i++) {
-      if (i <= n)
+      if (i < n+1)
         res.add(double.nan);
       else{
-        var periodPrices = data.skip(i-n).take(n);
-        res.add(_calculatePeriod(periodPrices));
+        var periodPrices = data//.sublist(i-(n+1), n+1);
+            .skip(i-(n+1))
+            .take(n+1);
+        res.add(_calculatePeriod(periodPrices, n));
       }
     }
 
     return res;
   }
 
-  double _calculatePeriod(Iterable<OHLCVItem> closePrices)
+  double _calculatePeriod(Iterable<OHLCVItem> closePrices, [n = 14])
   {
     double sumGain = 0.0;
     double sumLoss = 0.0;
+
     for (int i = 1; i < closePrices.length; i++)
     {
       var difference = closePrices.elementAt(i).close - closePrices.elementAt(i - 1).close;
@@ -39,8 +42,8 @@ class RSIIndicator
         sumLoss += difference.abs();
     }
 
-    var averageGain = (sumGain/n);
-    var averageLoss = (sumLoss/n);
+    var averageGain = sumGain / n;
+    var averageLoss = sumLoss / n;
 
     var relativeStrength = averageGain / averageLoss;
 
