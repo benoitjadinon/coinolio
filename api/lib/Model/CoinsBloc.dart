@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:api/Model/Indicators.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -8,7 +9,8 @@ import 'model.dart';
 
 class CoinsBloc
 {
-  OHLCService _dataService;
+  final OHLCService _dataService;
+  final _rsiIndicator = RSIIndicator(14);
 
   Stream<List<OHLCVItem>> _coinChartData;
   Stream<List<OHLCVItem>> get coinChartData => _coinChartData;
@@ -20,27 +22,29 @@ class CoinsBloc
   Stream<List<Coin>> _coins;
   Stream<List<Coin>> get coins => _coins;
 
+  Stream<List<double>> _coinRsi;
+  Stream<List<double>> get coinRsi => _coinRsi;
+
   StreamSubscription<Coin> _subs;
+
 
   CoinsBloc(this._dataService)
   {
     _coins = Observable.fromFuture(_dataService.getAllCoins())
-        .map((l) =>
-        l.sublist(0, 20))
-        .asBroadcastStream()
-    ;
+      .map((l) =>
+      l.sublist(0, 20))
+      .asBroadcastStream();
 
-    _coinChartData =
-      //_selectedCoin.map((_) => null as List<dynamic>) // shows loading ?
-      //.mergeWith([
-      _selectedCoin.asyncMap((c) => _dataService.getCoinDataHours(Pair(null /* TODO */, c, Coin.dollar /* TODO */)))
-      //])
-        ;
+    _coinChartData = _selectedCoin
+      .asyncMap((c) => _dataService.getCoinDataHours(Pair(null /* TODO */, c, Coin.dollar /* TODO */)))
+      .asBroadcastStream();
+
+    _coinRsi = _coinChartData
+      .map(_rsiIndicator.calculate);
 
     _subs = _coins
-        .map((cs) =>
-    cs[0])
-        .listen(_selectedCoin.add);
+      .map((cs) => cs[0])
+      .listen(_selectedCoin.add);
   }
 
   void dispose(){

@@ -5,6 +5,7 @@ import 'package:coinolio/Views/PlaceHolder.dart';
 import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -46,12 +47,21 @@ class _MyHomePageState extends State<HomePage> {
           buildList()
         ],
       ),
-      body: Center(
-          child:Stack(children: <Widget>[
-            //PlaceHolder(),
-            buildChart()
-        ])
-      ),
+      body:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              //PlaceHolder(),
+              Expanded(
+                child:buildChart(),
+              ),
+              Container(
+                height: 80.0,
+                child: buildRSI(),
+              ),
+            ]
+          )
       /*
       floatingActionButton: new FloatingActionButton(
         onPressed: () => (null),
@@ -68,18 +78,18 @@ class _MyHomePageState extends State<HomePage> {
         stream: bloc.coinChartData,
         builder: (context, snapshot) {
           return !snapshot.hasData || snapshot.data == null
-            ? new CircularProgressIndicator()
+            ? Center(child: CircularProgressIndicator())
             : TappableOHLCVGraph(snapshot.data);
         }
       )
     );
 
-  Widget buildList() {
-    return new StreamBuilder(
+  Widget buildList()
+    => new StreamBuilder(
       stream: bloc.coins,
       builder: (context, snapshot) {
         return !snapshot.hasData
-          ? new CircularProgressIndicator()
+          ? CircularProgressIndicator()
           : PopupMenuButton<Coin>(
             onSelected: (c) =>
               bloc.selectCoin.add(c),
@@ -98,6 +108,30 @@ class _MyHomePageState extends State<HomePage> {
         );
       },
     );
-  }
+
+  Widget buildRSI()
+    => Stack(children: <Widget>[
+      //new PlaceHolder(),
+      new StreamBuilder(
+        stream: bloc.coinRsi,
+        builder: (context, s) {
+          return !s.hasData || s.data == null
+            ? Center(child: CircularProgressIndicator())
+            : Sparkline(
+              data: s.data,
+              lineColor: Colors.lightBlue[500],
+              pointsMode: PointsMode.all,
+              pointSize: 0.0,
+              min: 0.0,
+              max: 100.0,
+              //enableGridLines: true,
+              //gridLineAmount: 10,
+              gridLines: [30.0, 70.0],
+              labelPrefix: "",
+            );
+        }
+      )
+    ]
+  );
 }
 

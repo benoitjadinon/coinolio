@@ -34,10 +34,10 @@ class OHLCService
     return res.cast<Exchange>();
   }
 
-  Future<List<OHLCVItem>> getCoinDataHours(Pair coin, [int limit=24]) async
+  Future<List<OHLCVItem>> getCoinDataHours(Pair coin, [int limit=48]) async
     => OHLCVResponse.fromJson(await getCoinDataHoursDynamic(coin, limit)).data;
 
-  Future<List<dynamic>> getCoinDataHoursDynamic(Pair coin, [int limit=24]) async
+  Future<List<dynamic>> getCoinDataHoursDynamic(Pair coin, [int limit=48]) async
   {
     Response response = await _http.get(
         '$_serverRoot'
