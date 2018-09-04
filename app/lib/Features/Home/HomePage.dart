@@ -115,10 +115,10 @@ class _MyHomePageState extends State<HomePage> {
       new StreamBuilder(
         stream: bloc.coinRsi,
         builder: (context, s) {
-          return !s.hasData || s.data == null
+          return !s.hasError && (!s.hasData || s.data == null)
             ? Center(child: CircularProgressIndicator())
             : Sparkline(
-              data: s.data,
+              data: s.data ?? [0.0],
               lineColor: Colors.lightBlue[500],
               pointsMode: PointsMode.all,
               pointSize: 0.0,

@@ -32,7 +32,7 @@ class CoinsBloc
   {
     _coins = Observable.fromFuture(_dataService.getAllCoins())
       .map((l) =>
-      l.sublist(0, 20))
+        l.sublist(0, 20))
       .asBroadcastStream();
 
     _coinChartData = _selectedCoin
@@ -57,8 +57,12 @@ class CoinsBloc
         OHLCVItem.fromClose(47.6875),
         OHLCVItem.fromClose(46.6875), // 14
         OHLCVItem.fromClose(45.6875), // 15
+        OHLCVItem.fromClose(43.0625), // 16
       ])*/
-      .map(_rsiIndicator.calculate);
+      .map(_rsiIndicator.calculate)
+      .handleError((e) =>
+        print(e))
+      ;
 
     _subs = _coins
       .map((cs) => cs[0])

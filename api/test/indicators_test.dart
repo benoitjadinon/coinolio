@@ -29,15 +29,18 @@ void main() {
         OHLCVItem.fromClose(47.6875),
         OHLCVItem.fromClose(46.6875), // 14
         OHLCVItem.fromClose(45.6875), // 15
+        OHLCVItem.fromClose(43.0625), // 16
       ];
 
       var expct = [
         51.779,
-        48.477
+        48.477,
+        41.073
       ];
 
-      expect(rsiIndicator.calculate(data)[14], expct[0]);
-      expect(rsiIndicator.calculate(data).last, expct.last);
+      expect((rsiIndicator.calculate(data)[14]*1000).round()/1000, expct[0]);
+      expect((rsiIndicator.calculate(data)[15]*1000).round()/1000, expct[1]);
+      expect((rsiIndicator.calculate(data).last*1000).round()/1000, expct.last);
     });
   });
 }
