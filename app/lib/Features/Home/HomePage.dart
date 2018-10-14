@@ -34,7 +34,7 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new StreamBuilder(
+        title: StreamBuilder(
           stream: bloc.selectedCoin,
           builder: (context, snapshot)
             => Text(widget.title + ' : ' + (snapshot.data?.name ?? ''))
