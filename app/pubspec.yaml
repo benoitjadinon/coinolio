@@ -10,7 +10,7 @@ dependencies:
 
   json_annotation:
 
-  cached_network_image: ^0.4.1
+  cached_network_image: ^0.5.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -26,13 +26,17 @@ dependencies:
 
   rxdart: ^0.18.1
 
+  bloc: ^0.3.0
+
+  dryice: ^2.0.22
+
 #dependency_overrides:
 #  flutter_candlesticks:
 #    path: libs/flutter-candlesticks
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  #flutter_test:
+    #sdk: flutter
 
   #json_serializable:
 

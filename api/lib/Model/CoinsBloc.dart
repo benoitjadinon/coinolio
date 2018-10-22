@@ -6,14 +6,34 @@ import 'package:rxdart/subjects.dart';
 
 import '../Services/OHLCService.dart';
 import 'model.dart';
+import 'package:bloc/bloc.dart';
 
-class CoinsBloc
+
+abstract class HomeEvent {}
+
+class OnCoinSelected extends HomeEvent {
+  Coin coin;
+  OnCoinSelected(this.coin);
+}
+
+abstract class HomeState {
+  String title;
+  HomeState([this.title = "Coinolio"]){}
+}
+class HomeEmptyState extends HomeState {}
+class HomeSelectedCoinState extends HomeState {
+  Coin selectedCoin;
+  HomeSelectedCoinState(this.selectedCoin)
+      : super(/*super.title +" "+*/ selectedCoin.name);
+}
+
+class CoinsBloc extends Bloc<HomeEvent, HomeState>
 {
   final OHLCService _dataService;
   final _rsiIndicator = RSIIndicator(14);
 
   Stream<List<OHLCVItem>> _coinChartData;
-  Stream<List<OHLCVItem>> get coinChartData => _coinChartData;
+  //Stream<List<OHLCVItem>> get coinChartData => _coinChartData;
 
   ReplaySubject<Coin> _selectedCoin = ReplaySubject(maxSize: 1);
   Stream<Coin> get selectedCoin => _selectedCoin;
@@ -63,6 +83,23 @@ class CoinsBloc
     _subs = _coins
       .map((cs) => cs[0])
       .listen(_selectedCoin.add);
+
+    BehaviorSubject<HomeEvent> eventSubject = BehaviorSubject<HomeEvent>();
+/*
+    eventSubject // instead of your _eventSubject
+        .where((ev) => ev is OnCoinSelected)
+        .map((ev) => ev as OnCoinSelected)
+        .map((ev) => new HomeSelectedCoinState(ev.coin))
+        .listen(setState);
+    */
+  }
+
+  @override
+  Stream<HomeState> mapEventToState(HomeState state, HomeEvent event) async* {
+    if (event is OnCoinSelected) {
+      _selectedCoin.add(event.coin);
+      yield HomeSelectedCoinState(event.coin);
+    }
   }
 
   void dispose(){
@@ -70,4 +107,5 @@ class CoinsBloc
     selectCoin.close();
     _selectedCoin.close();
   }
+
 }

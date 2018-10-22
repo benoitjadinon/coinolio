@@ -1,0 +1,8 @@
+// This is a generated file; do not edit or check into version control.
+FLUTTER_ROOT=/Users/ben/Workspaces/SDKs/flutter
+FLUTTER_APPLICATION_PATH=/Users/ben/Workspaces/Flutter/coinolio/api
+FLUTTER_TARGET=lib/main.dart
+FLUTTER_BUILD_MODE=debug
+FLUTTER_BUILD_DIR=build
+SYMROOT=${SOURCE_ROOT}/../build/ios
+FLUTTER_FRAMEWORK_DIR=/Users/ben/Workspaces/SDKs/flutter/bin/cache/artifacts/engine/ios

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:http/http.dart' as http;
+import 'package:bloc/bloc.dart';
+import 'package:dryice/dryice.dart' as di;
 
 class HomePage extends StatefulWidget {
 
@@ -34,8 +36,8 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: StreamBuilder(
-          stream: bloc.selectedCoin,
+        title: BlocBuilder(
+          bloc: bloc,
           builder: (context, snapshot)
             => Text(widget.title + ' : ' + (snapshot.data?.name ?? ''))
         ),
@@ -74,8 +76,8 @@ class _MyHomePageState extends State<HomePage> {
 
   Container buildChart()
     => Container(
-      child: new StreamBuilder(
-        stream: bloc.coinChartData,
+      child: new BlocBuilder(
+        bloc: bloc,
         builder: (context, snapshot) {
           return !snapshot.hasData || snapshot.data == null
             ? Center(child: CircularProgressIndicator())
@@ -85,8 +87,8 @@ class _MyHomePageState extends State<HomePage> {
     );
 
   Widget buildList()
-    => new StreamBuilder(
-      stream: bloc.coins,
+    => new BlocBuilder(
+      bloc: bloc,
       builder: (context, snapshot) {
         return !snapshot.hasData
           ? CircularProgressIndicator()
@@ -112,8 +114,8 @@ class _MyHomePageState extends State<HomePage> {
   Widget buildRSI()
     => Stack(children: <Widget>[
       //new PlaceHolder(),
-      new StreamBuilder(
-        stream: bloc.coinRsi,
+      new BlocBuilder(
+        bloc: bloc,
         builder: (context, s) {
           return !s.hasData || s.data == null
             ? Center(child: CircularProgressIndicator())
