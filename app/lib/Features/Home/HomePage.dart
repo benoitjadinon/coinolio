@@ -1,14 +1,10 @@
-import 'package:api/Model/CoinsBloc.dart';
+import 'package:api/Features/Chart/CoinsBloc.dart';
 import 'package:api/Model/model.dart';
-import 'package:api/Services/OHLCService.dart';
-import 'package:coinolio/Views/PlaceHolder.dart';
 import 'package:coinolio/Views/TappableOHLCVGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
-import 'package:http/http.dart' as http;
-import 'package:bloc/bloc.dart';
-import 'package:dryice/dryice.dart' as di;
+import 'package:kiwi/kiwi.dart' as kiwi;
 
 class HomePage extends StatefulWidget {
 
@@ -23,7 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
 
-  CoinsBloc bloc = CoinsBloc(OHLCService(http.Client()));
+  CoinsBloc bloc = kiwi.Container().resolve<CoinsBloc>();
 
   @override
   void initState() {
@@ -36,8 +32,8 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: BlocBuilder(
-          bloc: bloc,
+        title: new StreamBuilder(
+          stream: bloc.selectedCoin,
           builder: (context, snapshot)
             => Text(widget.title + ' : ' + (snapshot.data?.name ?? ''))
         ),
@@ -76,8 +72,8 @@ class _MyHomePageState extends State<HomePage> {
 
   Container buildChart()
     => Container(
-      child: new BlocBuilder(
-        bloc: bloc,
+      child: new StreamBuilder(
+        stream: bloc.coinChartData,
         builder: (context, snapshot) {
           return !snapshot.hasData || snapshot.data == null
             ? Center(child: CircularProgressIndicator())
@@ -87,14 +83,13 @@ class _MyHomePageState extends State<HomePage> {
     );
 
   Widget buildList()
-    => new BlocBuilder(
-      bloc: bloc,
+    => new StreamBuilder(
+      stream: bloc.coins,
       builder: (context, snapshot) {
         return !snapshot.hasData
           ? CircularProgressIndicator()
           : PopupMenuButton<Coin>(
-            onSelected: (c) =>
-              bloc.selectCoin.add(c),
+            onSelected: (c) =>bloc.selectCoin.add(c),
             itemBuilder: (c) => (snapshot.data as List<Coin>).map((Coin coin) {
               return PopupMenuItem<Coin>(
                 value: coin,
@@ -114,8 +109,8 @@ class _MyHomePageState extends State<HomePage> {
   Widget buildRSI()
     => Stack(children: <Widget>[
       //new PlaceHolder(),
-      new BlocBuilder(
-        bloc: bloc,
+      new StreamBuilder(
+        stream: bloc.coinRsi,
         builder: (context, s) {
           return !s.hasData || s.data == null
             ? Center(child: CircularProgressIndicator())

@@ -25,10 +25,8 @@ dependencies:
   flutter_stream_friends: ^0.8.0
 
   rxdart: ^0.18.1
-
   bloc: ^0.3.0
-
-  dryice: ^2.0.22
+  kiwi: ^0.1.0
 
 #dependency_overrides:
 #  flutter_candlesticks:
@@ -36,7 +34,10 @@ dependencies:
 
 dev_dependencies:
   #flutter_test:
-    #sdk: flutter
+  #  sdk: flutter // removed because of kiwi
+
+  build_runner: ^0.10.1
+  kiwi_generator: ^0.1.1
 
   #json_serializable:
 

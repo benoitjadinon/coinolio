@@ -8,16 +8,12 @@ environment:
   sdk: '>=2.0.0'
 
 dependencies:
-
-#  path: ^1.4.1
-
   http: ^0.12.0
-
   rxdart: ^0.18.1
-
   bloc: ^0.3.0
-
-  dryice: ^2.0.22
+  kiwi: ^0.1.0
 
 dev_dependencies:
   test: ^1.3.0
+  build_runner: ^0.10.1
+  kiwi_generator: ^0.1.1

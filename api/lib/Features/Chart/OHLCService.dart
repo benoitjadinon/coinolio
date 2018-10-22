@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import '../Model/model.dart';
+import '../../Model/model.dart';
 
 
 // https://min-api.cryptocompare.com/

@@ -1,4 +1,4 @@
-import 'package:api/Services/OHLCService.dart';
+import 'package:api/Features/Chart/OHLCService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_candlesticks/flutter_candlesticks.dart';

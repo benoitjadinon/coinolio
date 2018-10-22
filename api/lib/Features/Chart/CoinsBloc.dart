@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:api/Model/Indicators.dart';
+import 'package:api/Features/Chart/Indicators.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../Services/OHLCService.dart';
-import 'model.dart';
+import 'package:api/Features/Chart/OHLCService.dart';
+import '../../Model/model.dart';
 import 'package:bloc/bloc.dart';
 
 
@@ -33,7 +33,7 @@ class CoinsBloc extends Bloc<HomeEvent, HomeState>
   final _rsiIndicator = RSIIndicator(14);
 
   Stream<List<OHLCVItem>> _coinChartData;
-  //Stream<List<OHLCVItem>> get coinChartData => _coinChartData;
+  Stream<List<OHLCVItem>> get coinChartData => _coinChartData;
 
   ReplaySubject<Coin> _selectedCoin = ReplaySubject(maxSize: 1);
   Stream<Coin> get selectedCoin => _selectedCoin;

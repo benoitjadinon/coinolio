@@ -1,5 +1,8 @@
 import 'package:coinolio/Features/Home/HomePage.dart';
 import 'package:flutter/material.dart';
+import 'package:api/setup.dart';
+import 'setup.dart';
+import 'package:kiwi/kiwi.dart' as kiwi;
 
 void main() => runApp(new MyApp());
 
@@ -7,6 +10,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    getInjector().configure();
+    getAppInjector().configure();
+
     return MaterialApp(
       title: 'Coinolio',
       theme: ThemeData(
