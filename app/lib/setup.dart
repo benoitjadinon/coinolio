@@ -14,8 +14,14 @@ abstract class AppInjector extends Injector {
   @Register.factory(ServiceC, resolvers: {ServiceB: 'factoryB'})
   */
   void configure();
+
+  void setup()
+  {
+    super.setup();
+    configure();
+  }
 }
 
 class EmptyForGenerationToWork{}
 
-Injector getAppInjector() => _$AppInjector();
+AppInjector getAppInjector() => _$AppInjector();

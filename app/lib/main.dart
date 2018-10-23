@@ -11,8 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    getInjector().configure();
-    getAppInjector().configure();
+    getAppInjector().setup();
 
     return MaterialApp(
       title: 'Coinolio',

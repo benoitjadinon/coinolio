@@ -3,6 +3,8 @@ import 'package:api/Features/Chart/OHLCService.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:http/http.dart';
 
+// https://pub.dartlang.org/packages/kiwi_generator
+
 part 'setup.g.dart';
 
 abstract class Injector {
@@ -15,6 +17,10 @@ abstract class Injector {
   @Register.factory(ServiceC, resolvers: {ServiceB: 'factoryB'})
   */
   void configure();
+
+  void setup() {
+    configure();
+  }
 }
 
 Injector getInjector() => _$Injector();

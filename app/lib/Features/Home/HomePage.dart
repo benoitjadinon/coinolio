@@ -90,18 +90,21 @@ class _MyHomePageState extends State<HomePage> {
           ? CircularProgressIndicator()
           : PopupMenuButton<Coin>(
             onSelected: (c) =>bloc.selectCoin.add(c),
-            itemBuilder: (c) => (snapshot.data as List<Coin>).map((Coin coin) {
-              return PopupMenuItem<Coin>(
-                value: coin,
-                child: Row(
-                  children: <Widget>[
-                    //CachedNetworkImage(imageUrl: coin.imageUrl),
-                    Image(image: CachedNetworkImageProvider(coin.imageUrl)),
-                    Text(coin.name)
-                  ],
-                ),
-              );
-            }).toList()
+            itemBuilder: (c) =>
+              (snapshot.data as List<Coin>)
+              .map((Coin coin) {
+                return PopupMenuItem<Coin>(
+                  value: coin,
+                  child: Row(
+                    children: <Widget>[
+                      //CachedNetworkImage(imageUrl: coin.imageUrl),
+                      Image(image: CachedNetworkImageProvider(coin.imageUrl)),
+                      Text(coin.name)
+                    ],
+                  ),
+                );
+              })
+              .toList()
         );
       },
     );
