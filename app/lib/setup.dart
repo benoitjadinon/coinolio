@@ -4,7 +4,7 @@ import 'package:api/setup.dart';
 
 part 'setup.g.dart';
 
-abstract class AppInjector extends Injector {
+abstract class AppInjector {
   @Register.singleton(EmptyForGenerationToWork)
   /*
   @Register.singleton(OHLCService)
@@ -17,7 +17,7 @@ abstract class AppInjector extends Injector {
 
   void setup()
   {
-    super.setup();
+    getInjector().setup();
     configure();
   }
 }
