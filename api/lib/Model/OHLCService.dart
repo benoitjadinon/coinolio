@@ -3,11 +3,65 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import '../../Model/model.dart';
+import 'model.dart';
+
+
+abstract class BaseOHLCService
+{
+  Future<List<Exchange>> getExchanges();
+  Future<List<OHLCVItem>> getCoinDataHours(Pair coin, [int limit=48]);
+  Future<List<dynamic>> getCoinDataHoursDynamic(Pair coin, [int limit=48]);
+  Future<List<Coin>> getAllCoins();
+}
+
+class OHLCFakeService extends BaseOHLCService
+{
+  @override
+  Future<List<Coin>> getAllCoins() async {
+    return [
+      Coin("BTC")..name="BTC",
+      Coin("ETH")..name="ETH",
+    ];
+  }
+
+  @override
+  Future<List<OHLCVItem>> getCoinDataHours(Pair coin, [int limit = 48]) {
+    return Future.delayed(Duration(seconds: 2), () => [
+      OHLCVItem.fromClose(46.1250), // 0
+      OHLCVItem.fromClose(47.1250), // 1
+      OHLCVItem.fromClose(46.4375), // ...
+      OHLCVItem.fromClose(46.9375),
+      OHLCVItem.fromClose(44.9375),
+      OHLCVItem.fromClose(44.2500),
+      OHLCVItem.fromClose(44.6250),
+      OHLCVItem.fromClose(45.7500),
+      OHLCVItem.fromClose(47.8125),
+      OHLCVItem.fromClose(47.5625),
+      OHLCVItem.fromClose(47.0000),
+      OHLCVItem.fromClose(44.5625),
+      OHLCVItem.fromClose(46.3125),
+      OHLCVItem.fromClose(47.6875),
+      OHLCVItem.fromClose(46.6875), // 14
+      OHLCVItem.fromClose(45.6875), // 15
+    ]);
+  }
+
+  @override
+  Future<List> getCoinDataHoursDynamic(Pair coin, [int limit = 48]) {
+    return getCoinDataHours(coin, limit);
+  }
+
+  @override
+  Future<List<Exchange>> getExchanges() {
+    return Future(() => [
+      Exchange()..name="Binance"
+    ]);
+  }
+}
 
 
 // https://min-api.cryptocompare.com/
-class OHLCService
+class OHLCService extends BaseOHLCService
 {
   String _serverRoot = 'https://min-api.cryptocompare.com/data/';
 
@@ -139,7 +193,13 @@ class OHLCVItem
         volumeTo = json['volumeto']
     ;
 
-  OHLCVItem.fromClose(double this.close) {}
+  OHLCVItem.fromClose(double this.close) {
+    high = close+1;
+    low = close-2;
+    open = close-1;
+    volumeFrom = 1;
+    volumeTo = 1;
+  }
 
   Map<dynamic, dynamic> toMap ()
   {
@@ -152,7 +212,6 @@ class OHLCVItem
       ..["volumeto"] = volumeTo
     ;
   }
-
 }
 
 

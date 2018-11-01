@@ -20,3 +20,9 @@ A simple usage example:
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: http://example.com/issues/replaceme
+
+
+## Build dependencies
+
+`api> flutter packages pub run build_runner build`
+

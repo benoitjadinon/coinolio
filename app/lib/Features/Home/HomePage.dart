@@ -24,7 +24,7 @@ class _MyHomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    
     //bloc.loadData();
   }
 
@@ -32,10 +32,10 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new StreamBuilder(
-          stream: bloc.selectedCoin,
+        title: new StreamBuilder<HomeState>(
+          stream: bloc.state,
           builder: (context, snapshot)
-            => Text(widget.title + ' : ' + (snapshot.data?.name ?? ''))
+            => Text(widget.title + ' : ' + (snapshot.data?.title ?? ''))
         ),
         actions: <Widget>[
           /*IconButton(
@@ -72,38 +72,42 @@ class _MyHomePageState extends State<HomePage> {
 
   Container buildChart()
     => Container(
-      child: new StreamBuilder(
-        stream: bloc.coinChartData,
+      child: new StreamBuilder<HomeState>(
+        stream: bloc.state,
         builder: (context, snapshot) {
-          return !snapshot.hasData || snapshot.data == null
-            ? Center(child: CircularProgressIndicator())
-            : TappableOHLCVGraph(snapshot.data);
+          if (snapshot.data is HomeLoadingState)
+            return Center(child: CircularProgressIndicator());
+          else if (snapshot.data is HomeSelectedCoinState)
+            return TappableOHLCVGraph((snapshot.data as HomeSelectedCoinState).ohlc);
+          return Center();
         }
       )
     );
 
   Widget buildList()
-    => new StreamBuilder(
+    => new StreamBuilder<List<Coin>>(
       stream: bloc.coins,
       builder: (context, snapshot) {
         return !snapshot.hasData
           ? CircularProgressIndicator()
           : PopupMenuButton<Coin>(
-            onSelected: (c) =>bloc.selectCoin.add(c),
+            onSelected: (c) => bloc.dispatch(HomeSelectCoinEvent(c)),
             itemBuilder: (c) =>
-              (snapshot.data as List<Coin>)
-              .map((Coin coin) {
-                return PopupMenuItem<Coin>(
-                  value: coin,
-                  child: Row(
-                    children: <Widget>[
-                      //CachedNetworkImage(imageUrl: coin.imageUrl),
-                      Image(image: CachedNetworkImageProvider(coin.imageUrl)),
-                      Text(coin.name)
-                    ],
-                  ),
-                );
-              })
+              snapshot.data
+                .map((Coin coin) {
+                  return PopupMenuItem<Coin>(
+                    value: coin,
+                    child: Row(
+                      children: <Widget>[
+                        //CachedNetworkImage(imageUrl: coin.imageUrl),
+                        coin.imageUrl != null
+                          ? Image(image: CachedNetworkImageProvider(coin.imageUrl))
+                          : Center(),
+                        Text(coin.name ?? coin.symbol)
+                      ],
+                    ),
+                  );
+                })
               .toList()
         );
       },
@@ -112,13 +116,16 @@ class _MyHomePageState extends State<HomePage> {
   Widget buildRSI()
     => Stack(children: <Widget>[
       //new PlaceHolder(),
-      new StreamBuilder(
-        stream: bloc.coinRsi,
-        builder: (context, s) {
-          return !s.hasData || s.data == null
-            ? Center(child: CircularProgressIndicator())
-            : Sparkline(
-              data: s.data,
+      new StreamBuilder<HomeState>(
+        stream: bloc.state,
+        builder: (context, snapshot) {
+          if (snapshot.data is HomeEmptyState)
+            return Center();
+          else if (snapshot.data is HomeLoadingState)
+            return Center(child: CircularProgressIndicator());
+          else
+            return Sparkline(
+              data: (snapshot.data as HomeSelectedCoinState).rsi,
               lineColor: Colors.lightBlue[500],
               pointsMode: PointsMode.all,
               pointSize: 0.0,

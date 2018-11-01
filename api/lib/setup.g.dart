@@ -10,7 +10,8 @@ class _$Injector extends Injector {
   void configure() {
     final Container container = Container();
     container.registerFactory((c) => Client());
-    container.registerSingleton((c) => OHLCService(c<Client>()));
-    container.registerSingleton((c) => CoinsBloc(c<OHLCService>()));
+    container.registerSingleton<BaseOHLCService, OHLCService>(
+        (c) => OHLCService(c<Client>()));
+    container.registerSingleton((c) => CoinsBloc(c<BaseOHLCService>()));
   }
 }

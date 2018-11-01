@@ -24,7 +24,7 @@ dependencies:
 
   flutter_stream_friends: ^0.8.0
 
-  rxdart: ^0.18.1
+  rxdart: ^0.19.0
   #bloc: ^0.3.0
   kiwi: ^0.1.0
 

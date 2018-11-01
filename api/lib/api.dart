@@ -4,5 +4,5 @@
 library api;
 
 export 'package:api/Features/Chart/CoinsBloc.dart';
-export 'Features/Chart/OHLCService.dart';
+export 'package:api/Model/OHLCService.dart';
 export 'setup.dart';

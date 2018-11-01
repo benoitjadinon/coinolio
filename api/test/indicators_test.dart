@@ -1,6 +1,6 @@
 import 'package:api/Features/Chart/Indicators.dart';
 import 'package:test/test.dart';
-import 'package:api/Features/Chart/OHLCService.dart';
+import 'package:api/Model/OHLCService.dart';
 
 void main() {
   group('RSI', () {

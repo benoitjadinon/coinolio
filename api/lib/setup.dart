@@ -1,15 +1,23 @@
 import 'package:api/Features/Chart/CoinsBloc.dart';
-import 'package:api/Features/Chart/OHLCService.dart';
+import 'package:api/Model/OHLCService.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:http/http.dart';
 
 // https://pub.dartlang.org/packages/kiwi_generator
 
+// dart :
+// pub run build_runner build
+// pub run build_runner watch
+
+// flutter
+// flutter packages pub run build_runner build
+
 part 'setup.g.dart';
 
 abstract class Injector {
   @Register.factory(Client)
-  @Register.singleton(OHLCService)
+  //@Register.singleton(BaseOHLCService, from:OHLCFakeService)
+  @Register.singleton(BaseOHLCService, from:OHLCService)
   @Register.singleton(CoinsBloc)
   /*
   @Register.factory(Service, from: ServiceB)
@@ -18,8 +26,13 @@ abstract class Injector {
   */
   void configure();
 
+  static bool isInjected = false;
+
   void setup() {
-    configure();
+    if (!isInjected) {
+      configure();
+      isInjected = true;
+    }
   }
 }
 

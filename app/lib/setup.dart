@@ -15,10 +15,15 @@ abstract class AppInjector {
   */
   void configure();
 
+  static bool injected = false;
+
   void setup()
   {
-    getInjector().setup();
-    configure();
+    if (!injected){
+      getInjector().setup();
+      configure();
+      injected = true;
+    }
   }
 }
 
