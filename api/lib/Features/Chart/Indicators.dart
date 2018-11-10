@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:api/Model/OHLCService.dart';
+import 'package:api/Model/model.dart';
 
 // TODO verify 14 vs 15 with test cases from table inside :
 // http://cns.bu.edu/~gsc/CN710/fincast/Technical%20_indicators/Relative%20Strength%20Index%20(RSI).htm

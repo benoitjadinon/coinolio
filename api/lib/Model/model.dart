@@ -2,7 +2,7 @@
 class Exchange
 {
   String name;
-  List<Pair> pairs;
+  String code;
 }
 
 class Pair
@@ -12,7 +12,7 @@ class Pair
   final Coin base;
 
   String get symbol => coin.symbol;
-  String get name => symbol + '/' + base.symbol;
+  String get name => "$symbol-${base.symbol} (${exchange.code})";
 
   Pair(this.exchange, this.coin, this.base);
 }
@@ -36,5 +36,32 @@ class Coin
 
   Coin([this.symbol]);
 
-  static Coin dollar = Coin("USD")..isFiat=true;
+  static Coin getFiat([String symbol="USD"]) => Coin(symbol)..name=symbol..isFiat=true;
+}
+
+
+class OHLCVItem
+{
+  //num time;     //: 1526176800
+  num close;      //: 8421.96
+  num high;       //: 8448.33
+  num low;        //: 8386.37
+  num open;       //: 8447.71
+  num volume;     //: 22480267.83 // means the volume in the currency that is being traded
+  num volumeFrom; //: 2669.79     // means the volume in the base currency that things are traded into.
+
+  OHLCVItem();
+  OHLCVItem.ohlc(this.open, this.high, this.low, this.close, [this.volume]);
+
+  Map<dynamic, dynamic> toMap ()
+  {
+    return new Map()
+      ..["close"] = close
+      ..["high"] = high
+      ..["low"] = low
+      ..["open"] = open
+      ..["volumefrom"] = volumeFrom
+      ..["volumeto"] = volume
+    ;
+  }
 }

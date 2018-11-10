@@ -1,5 +1,7 @@
 import 'package:api/Features/Chart/CoinsBloc.dart';
 import 'package:api/Model/OHLCService.dart';
+import 'package:api/services/CoinigyService.dart';
+import 'package:api/services/CryptoCompareService.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:http/http.dart';
 
@@ -17,7 +19,8 @@ part 'setup.g.dart';
 abstract class Injector {
   @Register.factory(Client)
   //@Register.singleton(BaseOHLCService, from:OHLCFakeService)
-  @Register.singleton(BaseOHLCService, from:OHLCService)
+  //@Register.singleton(BaseOHLCService, from:CryptoCompareService)
+  @Register.singleton(BaseOHLCService, from:CoinigyService)
   @Register.singleton(CoinsBloc)
   /*
   @Register.factory(Service, from: ServiceB)
