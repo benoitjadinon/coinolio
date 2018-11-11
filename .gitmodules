@@ -5,6 +5,3 @@
 [submodule "app/libs/flutter-sparkline"]
 	path = app/libs/flutter-sparkline
 	url = https://github.com/benoitjadinon/flutter_sparkline
-[submodule "api/libs/bloc"]
-	path = api/libs/bloc
-	url = https://benoitjadinon@github.com/benoitjadinon/bloc.git

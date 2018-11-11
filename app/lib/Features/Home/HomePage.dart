@@ -16,27 +16,6 @@ class HomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-/*
-class TypedStreamBuilder<T> extends StreamBuilder<T>
-{
-  TypedStreamBuilder({
-    Key key,
-    initialData,
-    Stream<T> stream,
-    @required builder
-  }) : super(key, initialData, stream, (List<OnBuilder<TS extends T>> builders) => { });
-
-  /*
-  typedBuilder<TS extends T>(context, snapshot){
-    builder(context, snapshot);
-  }
-  */
-}
-
-class OnBuilder<TS extends T> extends Builder<T>{
-
-}
-*/
 
 class _MyHomePageState extends State<HomePage> {
 
@@ -45,8 +24,6 @@ class _MyHomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    
-    //bloc.loadData();
   }
 
   @override
@@ -94,8 +71,10 @@ class _MyHomePageState extends State<HomePage> {
   Container buildChart()
     => Container(
       child: new StreamBuilder<HomeState>(
-        stream: bloc.state,
+        stream: bloc?.state,
         builder: (context, snapshot) {
+          if (snapshot.hasError)
+            return Text('Error: ${snapshot.error}');
           if (snapshot.data is HomeLoadingState)
             return Center(child: CircularProgressIndicator());
           else if (snapshot.data is HomeSelectedCoinState)
@@ -107,12 +86,12 @@ class _MyHomePageState extends State<HomePage> {
 
   Widget buildList()
     => new StreamBuilder<List<Pair>>(
-      stream: bloc.pairs,
+      stream: bloc?.pairs,
       builder: (context, snapshot) {
         return !snapshot.hasData
           ? CircularProgressIndicator()
           : PopupMenuButton<Pair>(
-            onSelected: (c) => bloc.dispatch(HomeSelectCoinEvent(c)),
+            onSelected: (c) => bloc.selectCoinCommand.execute(HomeSelectCoinIntent(c)),
             itemBuilder: (c) =>
               snapshot.data
                 .map((Pair pair) {
@@ -137,7 +116,7 @@ class _MyHomePageState extends State<HomePage> {
     => Stack(children: <Widget>[
       //new PlaceHolder(),
       new StreamBuilder<HomeState>(
-        stream: bloc.state,
+        stream: bloc?.state,
         builder: (context, snapshot) {
           if (snapshot.data is HomeEmptyState)
             return Center();

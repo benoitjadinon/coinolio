@@ -10,8 +10,7 @@ environment:
 dependencies:
   http: ^0.12.0
   rxdart: ^0.19.0
-  bloc: #^0.3.0
-    path: libs/bloc
+  rx_command: ^4.0.2
   kiwi: ^0.1.0
 
 dev_dependencies:

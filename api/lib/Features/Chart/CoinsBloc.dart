@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:api/Features/Chart/Indicators.dart';
 import 'package:api/api_keys.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:rx_command/rx_command.dart';
 import 'package:api/Model/OHLCService.dart';
-import 'package:bloc/bloc.dart';
-
 import '../../Model/model.dart';
 
-// EVENTS
-abstract class HomeEvent {}
-class HomeSelectCoinEvent extends HomeEvent {
+// INTENTS
+abstract class HomeIntent {}
+class HomeSelectCoinIntent extends HomeIntent {
   Pair pair;
-  HomeSelectCoinEvent(this.pair);
+  HomeSelectCoinIntent(this.pair);
 }
 
 // STATES
@@ -31,10 +30,13 @@ class HomeSelectedCoinState extends HomeState {
 }
 
 // BLOC
-class CoinsBloc extends EventStateBloc<HomeEvent, HomeState>
+class CoinsBloc //extends EventStateBloc<HomeEvent, HomeState>
 {
   final BaseOHLCService _dataService;
   final _rsiIndicator = RSIIndicator(14);
+
+  var selectCoinCommand = RxCommand.createSync<HomeIntent, HomeIntent>((s) => s);
+  var state = BehaviorSubject<HomeState>();
 
   Observable<List<Pair>> _pairs;
   Stream<List<Pair>> get pairs => _pairs;
@@ -46,13 +48,15 @@ class CoinsBloc extends EventStateBloc<HomeEvent, HomeState>
       (_dataService as AuthorizableServiceMixin).authorize(api_keys["coinigy"]["key"], api_keys["coinigy"]["secret"]);
 
     _pairs = Observable.fromFuture(_dataService.getUserPairs())
-      //.map((l) => l.length > 20 ? l.sublist(0, 20) : l)
       .asBroadcastStream()
-    ;
+      ;
 
     var onSelectedPair = Observable.merge([
-      onEvent<HomeSelectCoinEvent>()
-          .map((evt) => evt.event.pair),
+      //onEvent<HomeSelectCoinEvent>()
+      selectCoinCommand
+          .where((evt) => evt is HomeSelectCoinIntent)
+          .cast<HomeSelectCoinIntent>()
+          .map((evt) => evt.pair),
       _pairs
           .where((lst) => lst.isNotEmpty)
           .map((lst) => lst.first),
@@ -61,36 +65,27 @@ class CoinsBloc extends EventStateBloc<HomeEvent, HomeState>
     .asBroadcastStream()
     ;
 
-    var selectedPairOHLCVData = onSelectedPair
+    var onSelectedPairData = onSelectedPair
       .asyncMap((pair) => _dataService.getPairOHLC(pair, Duration(minutes: 60)))
       .asBroadcastStream();
 
-    var selectedPairRsi = selectedPairOHLCVData
+    var onSelectedPairRsi = onSelectedPairData
       .map(_rsiIndicator.calculate);
 
-    disposeWhenDone(
+    //disposeWhenDone(
       Observable.merge([
         onSelectedPair.map((_) => HomeLoadingState()),
         Observable.combineLatest3(
           onSelectedPair,
-          selectedPairOHLCVData,
-          selectedPairRsi,
+          onSelectedPairData,
+          onSelectedPairRsi,
           (pair, ohlc, rsi) => HomeSelectedCoinState(pair, ohlc, rsi)
         ).cast<HomeState>(),
         ]
       )
       .startWith(HomeEmptyState())
-      .listen(setState)
-    );
-  }
-
-  @override
-  void setState(HomeState state) {
-    super.setState(state);
-  }
-
-  void dispose(){
-    //_subs.cancel();
-    super.dispose();
+      .listen(state.add)
+    //)
+    ;
   }
 }
